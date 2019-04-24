@@ -1,6 +1,11 @@
 import express from 'express'
 import logger from 'morgan'
 import bodyParser from 'body-parser'
+import dotenv from 'dotenv'
+dotenv.config()
+
+import { Root } from './types'
+import { processHook } from './hookProcessor'
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -22,13 +27,13 @@ app.get('/webhook', function(req, res) {
     res.send('Error, wrong validation token');
 });
 
-app.post('/webhook', async(req, res) => {
-    const hookObject = req.body;
-    console.log(JSON.stringify(hookObject, null, 2));
+app.post('/webhook', async (req, res) => {
+    const hookObject = req.body as Root;
 
+    await processHook(hookObject)
     res.status(200).send("OK");
 });
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+  console.log('Hello from port 3000!');
 });
