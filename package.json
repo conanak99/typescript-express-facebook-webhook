@@ -5,12 +5,16 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node-dev --respawn --transpileOnly index.ts"
+    "dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
+    "tunnel-dev": "ssh -R codedao-hook:80:localhost:3000 serveo.net",
+    "tunnel-start": "nohup ssh -R codedao-hook:80:localhost:3000 serveo.net &",
+    "tunnel-stop": "pkill -f codedao-hook || true"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/express": "^4.16.1",
     "@types/morgan": "^1.7.35",
+    "@types/node": "^11.13.7",
     "ts-node-dev": "^1.0.0-pre.32",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"

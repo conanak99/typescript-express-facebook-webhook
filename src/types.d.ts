@@ -3,6 +3,13 @@ export interface Root {
     object: string;
 }
 
+export interface PageInfo {
+    access_token: string
+    category: string
+    name: string
+    id: string
+}
+
 export interface Entry {
     changes: Change[];
     id: string;
@@ -40,4 +47,21 @@ export interface Post {
     id: string;
     status_type: string;
     is_published: boolean;
+}
+
+export interface Comment {
+    commentId: string
+    name: string
+    message: string
+}
+
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+          ACCESS_TOKEN: string
+          APP_ID: string
+          APP_SECRET: string
+          PAGE_ID: string
+        }
+      }
 }
