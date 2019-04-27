@@ -1,8 +1,7 @@
 import fs from 'fs'
 
-import { Comment, PostInfo } from "../types";
+import { Comment } from "../types";
 import BaseBot from "./baseBot";
-import { normalize } from "../helper/stringHelper";
 import { pickRandomElements, pickRandomElement } from '../helper/arrayHelper';
 
 
@@ -11,7 +10,7 @@ class TestProcessor extends BaseBot {
     private descriptions: string[] = []
 
     constructor() {
-        super('#girl-autobot')
+        super('#girl-autobot', ['girl', 'gai', 'gau'])
 
         const dbPath = 'db' 
         const imageDbPath = `${dbPath}/tumblr.json`
@@ -24,11 +23,6 @@ class TestProcessor extends BaseBot {
             this.descriptions = JSON.parse(fs.readFileSync(descrptionDbPath, 'utf8')) as string[]
         }
     }
-    
-    shouldReply(post: PostInfo, comment: Comment) {
-        const normalizedMessage = normalize(comment.message)
-        return super.shouldReply(post, comment) && normalizedMessage.includes('gai') 
-    }   
     
     async getReply({name}: Comment) {
         const girlDescriptions = pickRandomElements(this.descriptions, 2) 
