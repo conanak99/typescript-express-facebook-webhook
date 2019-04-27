@@ -6,7 +6,7 @@ dotenv.config()
 
 import { Root } from './types'
 import { processHook } from './hookProcessor'
-import { getPageToken } from './facebookApi'
+import { getPageToken } from './api/facebook'
 
 // Create a new express application instance
 const app: express.Application = express();

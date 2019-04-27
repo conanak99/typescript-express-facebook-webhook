@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {memoize} from 'lodash'
-import { PageInfo, Reply, PostInfo, ResponseData } from './types'
+import { PageInfo, Reply, PostInfo, ResponseData } from '../types'
 
 const graphApi = 'https://graph.facebook.com'
 const { ACCESS_TOKEN, APP_ID, APP_SECRET, PAGE_ID } = process.env

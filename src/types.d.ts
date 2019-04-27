@@ -82,7 +82,7 @@ export interface Reply {
     message: string, imageUrl?: string
 }
 
-export interface Processor {
+export interface Bot {
     shouldReply(post: PostInfo) : boolean
-    getReply(comment: Comment): Reply
+    getReply(comment: Comment): Promise<Reply>
 }
