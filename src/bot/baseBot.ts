@@ -4,10 +4,12 @@ import { normalize } from "../helper/stringHelper";
 abstract class BaseProcessor implements Bot {
     private _tag: string
     private textToInclude : string[]
+    protected _cache: Map<string, Reply>
 
     constructor(tag: string, textToInclude : string[] = []) {
         this._tag = tag
         this.textToInclude = textToInclude
+        this._cache = new Map<string, Reply>()
     }
 
     get tag() {

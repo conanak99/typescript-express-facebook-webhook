@@ -6,12 +6,12 @@ import girlBot from './bot/girlBot'
 const bots: Bot[] = [girlBot]
 const repliedComments = new Set<string>()
 
-export const processHook = async (hook : Root) => {
+export const processHook = async (hook: Root) => {
     // console.log(JSON.stringify(hook, null, 2))
 
     for (const entry of hook.entry) {
         for (const change of entry.changes) {
-            const {item} = change.value
+            const { item } = change.value
             if (item === 'comment') {
                 await processPostComment(change.value)
             }
@@ -19,28 +19,33 @@ export const processHook = async (hook : Root) => {
     }
 }
 
-const processPostComment = async (changeValue : Value) => {
-    const { comment_id: commentId, from: {name}, message, parent_id, post_id } = changeValue
+const processPostComment = async (changeValue: Value) => {
+    const {
+        comment_id: commentId,
+        from: { name, id: userId },
+        message,
+        parent_id, post_id
+    } = changeValue
+    
     if (parent_id !== post_id) {
         console.log(`Comment ${commentId} can not be replied to. Ignore it!`)
         return
     }
 
     if (!commentId) return
-
     if (repliedComments.has(commentId)) {
         console.log(`Duplicate hook for comment ${commentId}. Do not process!`)
         return
     } else {
         repliedComments.add(commentId)
     }
-    
+
     const post = await getPostInfo(post_id)
     for (const processor of bots) {
         const tag = processor.tag
-        const comment : Comment = { commentId, name, message }
+        const comment: Comment = { commentId, userId, name, message }
         if (processor.shouldReply(post, comment)) {
-            
+
             console.log(`Tag found: ${tag}. Comment`, comment)
             const reply = await processor.getReply(comment)
             console.log('Comment', comment, "Reply", reply)

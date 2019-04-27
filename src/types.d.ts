@@ -51,6 +51,7 @@ export interface Post {
 
 export interface Comment {
     commentId: string
+    userId: string
     name: string
     message: string
 }
