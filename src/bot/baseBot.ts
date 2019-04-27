@@ -3,11 +3,11 @@ import { normalize } from "../helper/stringHelper";
 
 abstract class BaseProcessor implements Bot {
     private _tag: string
-    private textInclude : string[]
+    private textToInclude : string[]
 
-    constructor(tag: string, textInclude : string[] = []) {
+    constructor(tag: string, textToInclude : string[] = []) {
         this._tag = tag
-        this.textInclude = textInclude
+        this.textToInclude = textToInclude
     }
 
     get tag() {
@@ -15,10 +15,13 @@ abstract class BaseProcessor implements Bot {
     }
 
     shouldReply(post: PostInfo, comment: Comment) {
+        // Weird facebook bug T_T, sometimes this is undefined
+        if (!comment.message) return false
+
         let commentInclude = true
-        if (this.textInclude.length > 0) {
+        if (this.textToInclude.length > 0) {
             const normalizedMessage = normalize(comment.message)
-            commentInclude = this.textInclude.some(text => normalizedMessage.includes(text))
+            commentInclude = this.textToInclude.some(text => normalizedMessage.includes(text))
         }
 
         return post.message.includes(this._tag) && commentInclude
