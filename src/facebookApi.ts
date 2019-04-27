@@ -1,26 +1,26 @@
 import axios from 'axios'
-import { PageInfo, Comment } from './types';
+import {memoize} from 'lodash'
+import { PageInfo, Reply, PostInfo, ResponseData } from './types'
 
 const graphApi = 'https://graph.facebook.com'
 const { ACCESS_TOKEN, APP_ID, APP_SECRET, PAGE_ID } = process.env
 
-export const replyToComment = async ({commentId, name, message} : Comment) => {
+export const replyToComment = async (commentId: string, {message, imageUrl}: Reply) => {
     const fullUrl = `${graphApi}/v3.2/${commentId}/comments?access_token=${ACCESS_TOKEN}`
 
     try {
         const data = {
-            message: `Hello ${name} From Code Bot. Your message is ${message} `,
-            attachment_url: 'https://www.catster.com/wp-content/uploads/2018/07/Savannah-cat-long-body-shot.jpg'
+            message: message,
+            attachment_url: imageUrl
         }
         console.log('Start replying to ' + commentId)
-        const response = await axios.post<{ id: string }>(fullUrl, data)
+        const response = await axios.post(fullUrl, data)
         console.log('Finished replying to ' + commentId)
-        return response.data
+        console.log('Result', response.data)
     } catch (err) {
         const error = err.response.data
         console.error(error)
     }
-    return false
 }
 
 export const getPageToken = async (exchangeToken: string) => {
@@ -29,9 +29,21 @@ export const getPageToken = async (exchangeToken: string) => {
     const userAccessToken =  userResponse.data.access_token
 
     const pageTokenUrl = `${graphApi}/v3.2/me/accounts?access_token=${userAccessToken}`
-    const pageResponse = await axios.get<{data: PageInfo[]}>(pageTokenUrl)
+    const pageResponse = await axios.get<ResponseData<PageInfo[]>>(pageTokenUrl)
 
     const pages = pageResponse.data.data
     const page = pages.find(p => p.id === PAGE_ID)
     return page
 }
+
+const getPostInfo = async (postId: string) => {
+    console.log(`Getting info of post ${postId}`)
+    const postInfoUrl = `${graphApi}/v3.2/${postId}?access_token=${ACCESS_TOKEN}`
+    const postResponse = await axios.get<PostInfo>(postInfoUrl)
+
+    const postInfo = postResponse.data
+    console.log('Post info', postInfo)
+    return postInfo
+}
+
+export const getPostInfoCached = memoize(getPostInfo)

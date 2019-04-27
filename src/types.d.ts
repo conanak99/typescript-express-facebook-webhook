@@ -1,3 +1,5 @@
+import { replyToComment } from "./facebookApi";
+
 export interface Root {
     entry: Entry[];
     object: string;
@@ -55,6 +57,16 @@ export interface Comment {
     message: string
 }
 
+export interface PostInfo {
+    created_time: string
+    message: string
+    id: string
+}
+
+export interface ResponseData<T> {
+    data: T
+}
+
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
@@ -64,4 +76,13 @@ declare global {
           PAGE_ID: string
         }
       }
+}
+
+export interface Reply {
+    message: string, imageUrl?: string
+}
+
+export interface Processor {
+    shouldReply(post: PostInfo) : boolean
+    getReply(comment: Comment): Reply
 }
