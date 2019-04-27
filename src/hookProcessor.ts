@@ -1,9 +1,9 @@
-import { Root, Value, Comment } from "./types"
+import { Root, Value, Comment, Bot } from "./types"
 import { replyToComment, getPostInfoCached as getPostInfo } from "./api/facebook"
 
-import testBots from './bot/testBot'
+import girlBot from './bot/girlBot'
 
-const bots = [testBots]
+const bots: Bot[] = [girlBot]
 
 export const processHook = async (hook : Root) => {
     // console.log(JSON.stringify(hook, null, 2))
@@ -30,14 +30,16 @@ const processPostComment = async (changeValue : Value) => {
     const post = await getPostInfo(post_id)
     for (const processor of bots) {
         const tag = processor.tag
-        if (processor.shouldReply(post)) {
-            console.log(`Tag found: ${tag}`)
-
-            const comment : Comment = { commentId, name, message }
+        const comment : Comment = { commentId, name, message }
+        if (processor.shouldReply(post, comment)) {
+            
+            console.log(`Tag found: ${tag}. Comment`, comment)
             const reply = await processor.getReply(comment)
+            console.log('Comment', comment, "Reply", reply)
+
             await replyToComment(commentId, reply)
         } else {
-            console.log(`Tag ${tag} not found in post`)
+            console.log(`Bot does not reply to tag "${tag}" and comment`, comment)
         }
     }
 }

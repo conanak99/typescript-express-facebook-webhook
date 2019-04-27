@@ -11,9 +11,9 @@ abstract class BaseProcessor implements Bot {
         return this._tag
     }
 
-    shouldReply(post: PostInfo) {
+    shouldReply(post: PostInfo, comment: Comment) {
         return post.message.includes(this._tag)
-    }    
+    }
     
     abstract getReply(comment: Comment): Promise<Reply>
 }

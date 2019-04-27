@@ -72,6 +72,7 @@ declare global {
           APP_ID: string
           APP_SECRET: string
           PAGE_ID: string
+          TUMBLR_API_KEY?: string
         }
       }
 }
@@ -81,6 +82,7 @@ export interface Reply {
 }
 
 export interface Bot {
-    shouldReply(post: PostInfo) : boolean
+    tag : string
+    shouldReply(post: PostInfo, comment: Comment) : boolean
     getReply(comment: Comment): Promise<Reply>
 }
