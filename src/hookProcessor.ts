@@ -34,7 +34,7 @@ const processPostComment = async (changeValue : Value) => {
             console.log(`Tag found: ${tag}`)
 
             const comment : Comment = { commentId, name, message }
-            const reply = processor.getReply(comment)
+            const reply = await processor.getReply(comment)
             await replyToComment(commentId, reply)
         } else {
             console.log(`Tag ${tag} not found in post`)

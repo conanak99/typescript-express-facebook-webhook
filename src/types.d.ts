@@ -1,5 +1,3 @@
-import { replyToComment } from "./facebookApi";
-
 export interface Root {
     entry: Entry[];
     object: string;
