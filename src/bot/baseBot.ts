@@ -16,7 +16,10 @@ abstract class BaseProcessor implements Bot {
 
     shouldReply(post: PostInfo, comment: Comment) {
         // Weird facebook bug T_T, sometimes this is undefined
-        if (!comment.message) return false
+        if (!comment.message) {
+            console.log('Weird Facebook hook bug', comment)
+            return false
+        } 
 
         let commentInclude = true
         if (this.textToInclude.length > 0) {
