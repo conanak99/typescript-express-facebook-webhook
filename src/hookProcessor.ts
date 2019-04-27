@@ -4,6 +4,7 @@ import { replyToComment, getPostInfoCached as getPostInfo } from "./api/facebook
 import girlBot from './bot/girlBot'
 
 const bots: Bot[] = [girlBot]
+const repliedComments = new Set<string>()
 
 export const processHook = async (hook : Root) => {
     // console.log(JSON.stringify(hook, null, 2))
@@ -26,6 +27,14 @@ const processPostComment = async (changeValue : Value) => {
     }
 
     if (!commentId) return
+
+    if (repliedComments.has(commentId)) {
+        console.log(`Duplicate hook for comment ${commentId}. Do not process!`)
+        return
+    } else {
+        repliedComments.add(commentId)
+    }
+    console.log({repliedComments})
     
     const post = await getPostInfo(post_id)
     for (const processor of bots) {
