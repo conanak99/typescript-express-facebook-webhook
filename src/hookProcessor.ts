@@ -47,7 +47,7 @@ const processPostComment = async (changeValue : Value) => {
 
             await replyToComment(commentId, reply)
         } else {
-            console.log(`Bot does not reply to tag "${tag}" and comment`, comment)
+            console.log(`Bot does not reply to tag "${tag}" and comment: ${message}`)
         }
     }
 }
