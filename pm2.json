@@ -2,7 +2,7 @@
     "apps": [
       {
         "name": "codedao-hook",
-        "script": "./build/index.js",
+        "script": "./build/src/index.js",
         "env": {
           "NODE_ENV": "production"
         },
