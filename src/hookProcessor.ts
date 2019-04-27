@@ -34,7 +34,6 @@ const processPostComment = async (changeValue : Value) => {
     } else {
         repliedComments.add(commentId)
     }
-    console.log({repliedComments})
     
     const post = await getPostInfo(post_id)
     for (const processor of bots) {
