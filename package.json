@@ -7,7 +7,7 @@
     "build": "tsc",
     "ts-node": "ts-node",
     "dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
-    "tunnel-dev": "ssh -R codedao-hook:80:localhost:3000 serveo.net",
+    "tunnel-dev": "autossh -R codedao-hook:80:localhost:3000 serveo.net",
     "tunnel-start": "nohup ssh -R codedao-hook:80:localhost:3000 serveo.net &",
     "tunnel-stop": "pkill -f serveo.net || true"
   },
